@@ -41,9 +41,11 @@ export async function POST(req: NextRequest) {
       },
     ],
     subscription_data: {
-      trial_period_days: 14,
+      trial_period_days: 7,
       metadata: { supabase_user_id: userId },
     },
+    // CB toujours obligatoire, même pendant l'essai gratuit
+    payment_method_collection: 'always',
     success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?upgraded=1`,
     cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing`,
     locale: 'fr',

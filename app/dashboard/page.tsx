@@ -300,9 +300,9 @@ export default function DashboardPage() {
             </h1>
             <p style={{ fontSize: 13, color: 'var(--text3)', marginTop: 2 }}>
               {stats.total} candidature{stats.total !== 1 ? 's' : ''}
-              {!isPro && stats.total >= 8 && (
+              {!isPro && stats.total >= 3 && (
                 <span style={{ color: 'var(--warn)', marginLeft: 8 }}>
-                  · {10 - stats.total} restante{10 - stats.total !== 1 ? 's' : ''} (plan gratuit)
+                  · {5 - stats.total} restante{5 - stats.total !== 1 ? 's' : ''} (plan gratuit)
                 </span>
               )}
             </p>

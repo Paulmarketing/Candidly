@@ -63,8 +63,8 @@ export default function AddModal({
       return
     }
 
-    if (!isPro && !isEditing && currentCount >= 10) {
-      setError('Limite du plan gratuit atteinte (10 candidatures). Passe à Pro pour continuer.')
+    if (!isPro && !isEditing && currentCount >= 5) {
+      setError('Limite du plan gratuit atteinte (5 candidatures). Passe à Pro pour continuer.')
       return
     }
 

@@ -67,7 +67,7 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
         </div>
         {isPro && (
           <p style={{ fontSize: 12, color: 'var(--accent)', marginTop: 6, fontWeight: 500 }}>
-            Essai gratuit 14 jours — sans CB
+            Essai gratuit 7 jours — CB requise
           </p>
         )}
       </div>
@@ -83,7 +83,7 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
               '✅ Support prioritaire',
             ]
           : [
-              '✅ Jusqu\'à 10 candidatures',
+              '✅ Jusqu\'à 5 candidatures',
               '✅ Tableau de bord de base',
               '✅ Export CSV',
               '⬜ Rappels email (Pro)',

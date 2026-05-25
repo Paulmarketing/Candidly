@@ -44,9 +44,9 @@ export async function POST(req: NextRequest) {
       .select('*', { count: 'exact', head: true })
       .eq('user_id', session.user.id)
 
-    if ((count ?? 0) >= 10) {
+    if ((count ?? 0) >= 5) {
       return NextResponse.json(
-        { error: 'Limite du plan gratuit atteinte (10 candidatures).' },
+        { error: 'Limite du plan gratuit atteinte (5 candidatures).' },
         { status: 403 }
       )
     }
