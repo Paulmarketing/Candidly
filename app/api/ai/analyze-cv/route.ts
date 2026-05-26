@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
 
     const prompt = `Tu es un expert RH et coach carrière français. Analyse ce CV en français et retourne une analyse structurée avec exactement ce format JSON (sans markdown, sans backticks, juste le JSON brut) :
 

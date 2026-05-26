@@ -4,4 +4,4 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 export const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 // Modèle utilisé : Gemini 1.5 Flash (gratuit, rapide, supporte les PDFs)
-export const geminiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+export const geminiModel = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })

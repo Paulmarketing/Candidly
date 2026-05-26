@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { geminiModel } from '@/lib/gemini'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createServerClient } from '@/lib/supabase-server'
 
 export async function POST(req: NextRequest) {
@@ -37,7 +37,9 @@ Consignes :
 - Adapte le contenu à l'entreprise et au poste spécifiquement`
 
   try {
-    const result = await geminiModel.generateContent(prompt)
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+    const result = await model.generateContent(prompt)
     const letter = result.response.text().trim()
     return NextResponse.json({ letter })
   } catch (err) {
