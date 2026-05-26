@@ -38,7 +38,7 @@ Consignes :
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash-preview-04-17' })
     const result = await model.generateContent(prompt)
     const letter = result.response.text().trim()
     return NextResponse.json({ letter })
