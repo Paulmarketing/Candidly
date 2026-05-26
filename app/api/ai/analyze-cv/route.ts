@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { geminiModel } from '@/lib/gemini'
+import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createServerClient } from '@/lib/supabase-server'
 
 export async function POST(req: NextRequest) {
@@ -14,11 +14,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Fonctionnalité réservée au plan Pro' }, { status: 403 })
   }
 
-  // Récupère le PDF envoyé en base64
   const { pdfBase64 } = await req.json()
   if (!pdfBase64) return NextResponse.json({ error: 'PDF manquant' }, { status: 400 })
 
-  const prompt = `Tu es un expert RH et coach carrière français. Analyse ce CV en français et retourne une analyse structurée avec exactement ce format JSON (sans markdown, juste le JSON brut) :
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+
+    const prompt = `Tu es un expert RH et coach carrière français. Analyse ce CV en français et retourne une analyse structurée avec exactement ce format JSON (sans markdown, sans backticks, juste le JSON brut) :
 
 {
   "score": <nombre entre 1 et 10>,
@@ -28,22 +31,44 @@ export async function POST(req: NextRequest) {
   "resume": "Un paragraphe de 2-3 phrases résumant l'analyse globale"
 }
 
-Sois précis, bienveillant et orienté action. Les suggestions doivent être très concrètes et applicables immédiatement.`
+Sois précis, bienveillant et orienté action.`
 
-  try {
-    const result = await geminiModel.generateContent([
-      { inlineData: { mimeType: 'application/pdf', data: pdfBase64 } },
-      prompt,
-    ])
+    // Format correct pour envoyer un PDF à Gemini
+    const result = await model.generateContent({
+      contents: [{
+        role: 'user',
+        parts: [
+          {
+            inlineData: {
+              mimeType: 'application/pdf',
+              data: pdfBase64,
+            },
+          },
+          { text: prompt },
+        ],
+      }],
+    })
 
     const text = result.response.text().trim()
-    // Nettoie la réponse si Gemini ajoute du markdown
-    const clean = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
-    const analysis = JSON.parse(clean)
+    // Nettoie si Gemini ajoute du markdown malgré la consigne
+    const clean = text
+      .replace(/```json\n?/gi, '')
+      .replace(/```\n?/g, '')
+      .trim()
+
+    let analysis
+    try {
+      analysis = JSON.parse(clean)
+    } catch {
+      // Si le JSON est invalide, retourne une erreur lisible
+      console.error('[AI] Réponse Gemini non-JSON:', clean.substring(0, 200))
+      return NextResponse.json({ error: 'Réponse IA invalide, réessaie.' }, { status: 500 })
+    }
 
     return NextResponse.json(analysis)
   } catch (err) {
-    console.error('[AI] Erreur analyse CV:', err)
-    return NextResponse.json({ error: 'Erreur lors de l\'analyse' }, { status: 500 })
+    const message = err instanceof Error ? err.message : 'Erreur inconnue'
+    console.error('[AI] Erreur Gemini:', message)
+    return NextResponse.json({ error: `Erreur IA : ${message}` }, { status: 500 })
   }
 }
