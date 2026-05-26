@@ -79,7 +79,8 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
               '✅ Candidatures illimitées',
               '✅ Rappels email automatiques',
               '✅ Export CSV',
-              '✅ Tableau de bord complet',
+              '✨ Analyse de CV par IA',
+              '✨ Lettre de motivation IA',
               '✅ Support prioritaire',
             ]
           : [
@@ -87,7 +88,8 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
               '✅ Tableau de bord de base',
               '✅ Export CSV',
               '⬜ Rappels email (Pro)',
-              '⬜ Candidatures illimitées (Pro)',
+              '⬜ Analyse CV par IA (Pro)',
+              '⬜ Lettre de motivation IA (Pro)',
             ]
         ).map((feature, i) => (
           <li

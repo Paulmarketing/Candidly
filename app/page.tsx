@@ -176,6 +176,99 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* IA Section */}
+      <section style={{ maxWidth: 960, margin: '0 auto 100px' }}>
+        <div
+          className="glass-card"
+          style={{
+            padding: '48px 40px',
+            background: 'linear-gradient(135deg, rgba(91,124,246,0.08) 0%, rgba(155,142,248,0.08) 100%)',
+            textAlign: 'center',
+          }}
+        >
+          <div
+            style={{
+              display: 'inline-block',
+              background: 'linear-gradient(135deg,#5b7cf6,#9b8ef8)',
+              borderRadius: 40,
+              padding: '6px 18px',
+              fontSize: 12,
+              fontWeight: 600,
+              color: 'white',
+              marginBottom: 20,
+              letterSpacing: '0.04em',
+            }}
+          >
+            ✨ NOUVEAU — Propulsé par l&apos;IA
+          </div>
+          <h2
+            style={{
+              fontSize: 32,
+              fontWeight: 600,
+              color: 'var(--text1)',
+              marginBottom: 12,
+            }}
+          >
+            L&apos;IA qui booste tes candidatures
+          </h2>
+          <p style={{ fontSize: 16, color: 'var(--text2)', marginBottom: 40, maxWidth: 520, margin: '0 auto 40px' }}>
+            Deux outils IA réservés aux membres Pro pour maximiser tes chances d&apos;obtenir un entretien.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, textAlign: 'left' }}>
+            {/* Analyse CV */}
+            <div
+              className="glass-card"
+              style={{ padding: '28px 24px', background: 'rgba(255,255,255,0.6)' }}
+            >
+              <div style={{ fontSize: 36, marginBottom: 14 }}>📄</div>
+              <h3 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 8 }}>
+                Analyse de CV
+              </h3>
+              <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.6, marginBottom: 16 }}>
+                Uploade ton CV en PDF. L&apos;IA l&apos;analyse en 5 secondes et te donne un score, tes points forts, tes faiblesses et des suggestions concrètes pour l&apos;améliorer.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {['Score global sur 10', 'Points forts identifiés', 'Suggestions d\'amélioration'].map((item) => (
+                  <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ color: 'var(--success)', fontSize: 14 }}>✓</span>
+                    <span style={{ fontSize: 13, color: 'var(--text2)' }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Lettre de motivation */}
+            <div
+              className="glass-card"
+              style={{ padding: '28px 24px', background: 'rgba(255,255,255,0.6)' }}
+            >
+              <div style={{ fontSize: 36, marginBottom: 14 }}>✍️</div>
+              <h3 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 8 }}>
+                Lettre de motivation IA
+              </h3>
+              <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.6, marginBottom: 16 }}>
+                Sélectionne une candidature, décris ton profil en 2 lignes et colle l&apos;offre d&apos;emploi. L&apos;IA génère une lettre personnalisée et professionnelle en quelques secondes.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {['Personnalisée pour chaque offre', 'Ton professionnel et authentique', 'Prête à copier-coller'].map((item) => (
+                  <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span style={{ color: 'var(--success)', fontSize: 14 }}>✓</span>
+                    <span style={{ fontSize: 13, color: 'var(--text2)' }}>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: 32 }}>
+            <Link href="/register" className="btn-primary" style={{ fontSize: 15, padding: '13px 32px' }}>
+              Essayer gratuitement 7 jours →
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Features */}
       <section style={{ maxWidth: 960, margin: '0 auto 100px' }}>
         <h2
@@ -225,7 +318,7 @@ export default function LandingPage() {
             {
               icon: '🇫🇷',
               title: '100% français',
-              desc: 'Interface, emails, support — tout est en français. Pour les étudiants franco.',
+              desc: 'Interface, emails, support — tout est en français. Pour les étudiants francophones.',
             },
           ].map((f) => (
             <div key={f.title} className="glass-card hover-card" style={{ padding: '24px' }}>
