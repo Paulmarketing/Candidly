@@ -44,6 +44,6 @@ Consignes :
     return NextResponse.json({ letter })
   } catch (err) {
     console.error('[AI] Erreur génération lettre:', err)
-    return NextResponse.json({ error: 'Erreur lors de la génération' }, { status: 500 })
+    return NextResponse.json({ error: "La génération a échoué. Réessaie dans quelques instants." }, { status: 500 })
   }
 }

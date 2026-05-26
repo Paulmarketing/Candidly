@@ -69,6 +69,6 @@ Sois précis, bienveillant et orienté action.`
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Erreur inconnue'
     console.error('[AI] Erreur Gemini:', message)
-    return NextResponse.json({ error: `Erreur IA : ${message}` }, { status: 500 })
+    return NextResponse.json({ error: "L'analyse a échoué. Vérifie que ton fichier est bien un PDF lisible et réessaie." }, { status: 500 })
   }
 }
