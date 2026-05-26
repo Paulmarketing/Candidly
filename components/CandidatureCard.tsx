@@ -7,6 +7,8 @@ interface CandidatureCardProps {
   candidature: Candidature
   onEdit: (candidature: Candidature) => void
   onDelete: (id: string) => void
+  onCoverLetter?: (candidature: Candidature) => void
+  isPro?: boolean
 }
 
 function formatDate(dateStr: string | null): string {
@@ -30,7 +32,7 @@ function getRappelUrgency(dateRappel: string | null): 'urgent' | 'proche' | null
   return null
 }
 
-export default function CandidatureCard({ candidature, onEdit, onDelete }: CandidatureCardProps) {
+export default function CandidatureCard({ candidature, onEdit, onDelete, onCoverLetter, isPro }: CandidatureCardProps) {
   const statut = STATUT_STYLES[candidature.statut]
   const urgency = getRappelUrgency(candidature.date_rappel)
 
@@ -168,6 +170,34 @@ export default function CandidatureCard({ candidature, onEdit, onDelete }: Candi
       >
         {statut.label}
       </span>
+
+      {/* Bouton lettre de motivation (Pro) */}
+      {isPro && onCoverLetter && (
+        <button
+          onClick={() => onCoverLetter(candidature)}
+          title="Générer une lettre de motivation"
+          style={{
+            height: 32,
+            borderRadius: 8,
+            border: '1px solid rgba(91,124,246,0.25)',
+            background: 'rgba(91,124,246,0.08)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '0 10px',
+            fontSize: 11,
+            fontWeight: 500,
+            color: 'var(--accent)',
+            gap: 4,
+            transition: 'all 0.15s',
+            whiteSpace: 'nowrap',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(91,124,246,0.15)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(91,124,246,0.08)' }}
+        >
+          ✨ Lettre
+        </button>
+      )}
 
       {/* Actions */}
       <div style={{ display: 'flex', gap: 6 }}>

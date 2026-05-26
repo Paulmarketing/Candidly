@@ -12,6 +12,8 @@ import CandidatureCard from '@/components/CandidatureCard'
 import AddModal from '@/components/AddModal'
 import ReminderBanner from '@/components/ReminderBanner'
 import ConfirmDialog from '@/components/ConfirmDialog'
+import CVAnalysisModal from '@/components/CVAnalysisModal'
+import CoverLetterModal from '@/components/CoverLetterModal'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -27,6 +29,9 @@ export default function DashboardPage() {
   const [editingCandidature, setEditingCandidature] = useState<Candidature | null>(null)
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const [cvModalOpen, setCvModalOpen] = useState(false)
+  const [coverLetterModalOpen, setCoverLetterModalOpen] = useState(false)
+  const [coverLetterCandidature, setCoverLetterCandidature] = useState<Candidature | null>(null)
 
   // Filtres
   const [searchQuery, setSearchQuery] = useState('')
@@ -216,6 +221,18 @@ export default function DashboardPage() {
         <Logo />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {isPro && (
+            <>
+              <button
+                onClick={() => setCvModalOpen(true)}
+                className="btn-secondary"
+                style={{ fontSize: 12, padding: '7px 14px' }}
+              >
+                ✨ Analyser mon CV
+              </button>
+            </>
+          )}
+
           {!isPro && (
             <Link
               href="/pricing"
@@ -461,6 +478,11 @@ export default function DashboardPage() {
                   setModalOpen(true)
                 }}
                 onDelete={(id) => setDeleteId(id)}
+                onCoverLetter={(cand) => {
+                  setCoverLetterCandidature(cand)
+                  setCoverLetterModalOpen(true)
+                }}
+                isPro={isPro}
               />
             ))}
           </div>
@@ -478,6 +500,19 @@ export default function DashboardPage() {
         editingCandidature={editingCandidature}
         isPro={isPro}
         currentCount={candidatures.length}
+      />
+
+      {/* Modale analyse CV */}
+      <CVAnalysisModal
+        isOpen={cvModalOpen}
+        onClose={() => setCvModalOpen(false)}
+      />
+
+      {/* Modale lettre de motivation */}
+      <CoverLetterModal
+        isOpen={coverLetterModalOpen}
+        onClose={() => { setCoverLetterModalOpen(false); setCoverLetterCandidature(null) }}
+        candidature={coverLetterCandidature}
       />
 
       {/* Dialog suppression */}
