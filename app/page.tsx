@@ -381,6 +381,23 @@ export default function LandingPage() {
         <p style={{ fontSize: 12, color: 'var(--text3)', marginTop: 12 }}>
           © {new Date().getFullYear()} Candidly — Fait avec ❤️ pour les étudiants français
         </p>
+        <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginTop: 16 }}>
+          {[
+            { label: 'Mentions légales', href: '/mentions-legales' },
+            { label: 'Confidentialité', href: '/confidentialite' },
+            { label: 'CGU', href: '/cgu' },
+            { label: 'CGV', href: '/cgv' },
+            { label: 'Contact', href: 'mailto:contact@candidlyapp.fr' },
+          ].map(link => (
+            <Link
+              key={link.label}
+              href={link.href}
+              style={{ fontSize: 12, color: 'var(--text3)', textDecoration: 'none' }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
       </footer>
     </main>
   )
