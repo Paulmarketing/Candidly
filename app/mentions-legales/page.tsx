@@ -19,7 +19,7 @@ export default function MentionsLegales() {
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 12 }}>Éditeur du site</h2>
               <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8 }}>
-                <strong>Paul Assat</strong><br />
+                <strong>Candidly</strong><br />
                 Micro-entrepreneur<br />
                 Paris, France<br />
                 SIRET : <em>en cours d&apos;obtention</em><br />
@@ -49,7 +49,7 @@ export default function MentionsLegales() {
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 12 }}>Propriété intellectuelle</h2>
               <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8 }}>
-                L&apos;ensemble du contenu de ce site (textes, images, logo, interface) est la propriété exclusive de Paul Assat.
+                L&apos;ensemble du contenu de ce site (textes, images, logo, interface) est la propriété exclusive de Candidly.
                 Toute reproduction, même partielle, est interdite sans autorisation préalable.
               </p>
             </div>

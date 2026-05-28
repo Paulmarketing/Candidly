@@ -19,7 +19,7 @@ export default function Confidentialite() {
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 12 }}>1. Responsable du traitement</h2>
               <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8 }}>
-                Paul Assat, micro-entrepreneur basé à Paris (France).<br />
+                Candidly, micro-entrepreneur basé à Paris (France).<br />
                 Contact : <a href="mailto:contact@candidlyapp.fr" style={{ color: 'var(--accent)' }}>contact@candidlyapp.fr</a>
               </p>
             </div>

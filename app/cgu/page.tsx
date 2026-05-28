@@ -19,7 +19,7 @@ export default function CGU() {
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 12 }}>1. Présentation du service</h2>
               <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8 }}>
-                Candidly est une application web de suivi de candidatures (stages et emplois) éditée par Paul Assat,
+                Candidly est une application web de suivi de candidatures (stages et emplois) éditée par Candidly,
                 micro-entrepreneur basé à Paris, France. L&apos;accès au service est disponible sur <a href="https://candidlyapp.fr" style={{ color: 'var(--accent)' }}>candidlyapp.fr</a>.
               </p>
             </div>

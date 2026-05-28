@@ -19,7 +19,7 @@ export default function CGV() {
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 12 }}>1. Vendeur</h2>
               <p style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 1.8 }}>
-                <strong>Paul Assat</strong><br />
+                <strong>Candidly</strong><br />
                 Micro-entrepreneur — Paris, France<br />
                 SIRET : <em>en cours d&apos;obtention</em><br />
                 Email : <a href="mailto:contact@candidlyapp.fr" style={{ color: 'var(--accent)' }}>contact@candidlyapp.fr</a>
@@ -39,7 +39,7 @@ export default function CGV() {
                 </p>
               </div>
               <p style={{ fontSize: 13, color: 'var(--text3)', marginTop: 12, lineHeight: 1.6 }}>
-                En tant que micro-entrepreneur, Paul Assat bénéficie de la franchise en base de TVA
+                En tant que micro-entrepreneur, Candidly bénéficie de la franchise en base de TVA
                 (article 293 B du CGI). La TVA n&apos;est pas applicable.
               </p>
             </div>
