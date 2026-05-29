@@ -44,7 +44,7 @@ export default function CGU() {
             <div>
               <h2 style={{ fontSize: 18, fontWeight: 600, color: 'var(--text1)', marginBottom: 12 }}>4. Plans et fonctionnalités</h2>
               <ul style={{ fontSize: 14, color: 'var(--text2)', lineHeight: 2, paddingLeft: 20 }}>
-                <li><strong>Plan Gratuit :</strong> jusqu&apos;à 5 candidatures, fonctionnalités de base</li>
+                <li><strong>Plan Gratuit :</strong> jusqu&apos;à 10 candidatures, fonctionnalités de base</li>
                 <li><strong>Plan Pro :</strong> candidatures illimitées, rappels email, export CSV, analyse CV par IA, lettre de motivation IA</li>
               </ul>
             </div>

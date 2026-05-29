@@ -84,7 +84,7 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
               '✅ Support prioritaire',
             ]
           : [
-              '✅ Jusqu\'à 5 candidatures',
+              '✅ Jusqu\'à 10 candidatures',
               '✅ Tableau de bord de base',
               '✅ Export CSV',
               '⬜ Rappels email (Pro)',

@@ -90,7 +90,7 @@ export default function LandingPage() {
         </div>
 
         <p style={{ fontSize: 12, color: 'var(--text3)', marginTop: 16 }}>
-          Gratuit jusqu&apos;à 5 candidatures · Essai Pro 7 jours avec CB
+          Gratuit jusqu&apos;à 10 candidatures · Essai Pro 7 jours avec CB
         </p>
       </section>
 
