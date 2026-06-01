@@ -3,15 +3,19 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createServerClient } from '@/lib/supabase-server'
 
 export async function POST(req: NextRequest) {
-  // Vérifie que l'utilisateur est connecté et Pro
   const supabase = await createServerClient()
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   const { data: profile } = await supabase
-    .from('profiles').select('is_pro').eq('id', session.user.id).single()
-  if (!profile?.is_pro) {
-    return NextResponse.json({ error: 'Fonctionnalité réservée au plan Pro' }, { status: 403 })
+    .from('profiles')
+    .select('is_pro, free_cv_used')
+    .eq('id', session.user.id)
+    .single()
+
+  // Bloqué si : pas Pro ET crédit gratuit déjà utilisé
+  if (!profile?.is_pro && profile?.free_cv_used) {
+    return NextResponse.json({ error: 'UPGRADE_REQUIRED' }, { status: 403 })
   }
 
   const { pdfBase64 } = await req.json()
@@ -33,39 +37,36 @@ export async function POST(req: NextRequest) {
 
 Sois précis, bienveillant et orienté action.`
 
-    // Format correct pour envoyer un PDF à Gemini
     const result = await model.generateContent({
       contents: [{
         role: 'user',
         parts: [
-          {
-            inlineData: {
-              mimeType: 'application/pdf',
-              data: pdfBase64,
-            },
-          },
+          { inlineData: { mimeType: 'application/pdf', data: pdfBase64 } },
           { text: prompt },
         ],
       }],
     })
 
     const text = result.response.text().trim()
-    // Nettoie si Gemini ajoute du markdown malgré la consigne
-    const clean = text
-      .replace(/```json\n?/gi, '')
-      .replace(/```\n?/g, '')
-      .trim()
+    const clean = text.replace(/```json\n?/gi, '').replace(/```\n?/g, '').trim()
 
     let analysis
     try {
       analysis = JSON.parse(clean)
     } catch {
-      // Si le JSON est invalide, retourne une erreur lisible
       console.error('[AI] Réponse Gemini non-JSON:', clean.substring(0, 200))
       return NextResponse.json({ error: 'Réponse IA invalide, réessaie.' }, { status: 500 })
     }
 
-    return NextResponse.json(analysis)
+    // Marquer le crédit gratuit comme utilisé si l'utilisateur n'est pas Pro
+    if (!profile?.is_pro) {
+      await supabase
+        .from('profiles')
+        .update({ free_cv_used: true })
+        .eq('id', session.user.id)
+    }
+
+    return NextResponse.json({ ...analysis, usedFreeCredit: !profile?.is_pro })
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Erreur inconnue'
     console.error('[AI] Erreur Gemini:', message)

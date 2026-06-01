@@ -87,9 +87,9 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
               '✅ Jusqu\'à 10 candidatures',
               '✅ Tableau de bord de base',
               '✅ Export CSV',
+              '🎁 1 analyse CV gratuite',
+              '🎁 1 lettre de motivation gratuite',
               '⬜ Rappels email (Pro)',
-              '⬜ Analyse CV par IA (Pro)',
-              '⬜ Lettre de motivation IA (Pro)',
             ]
         ).map((feature, i) => (
           <li

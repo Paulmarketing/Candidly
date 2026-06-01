@@ -212,7 +212,7 @@ export default function LandingPage() {
             L&apos;IA qui booste tes candidatures
           </h2>
           <p style={{ fontSize: 16, color: 'var(--text2)', marginBottom: 40, maxWidth: 520, margin: '0 auto 40px' }}>
-            Deux outils IA réservés aux membres Pro pour maximiser tes chances d&apos;obtenir un entretien.
+            1 essai gratuit inclus pour chaque outil. Passe Pro pour un accès illimité.
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, textAlign: 'left' }}>

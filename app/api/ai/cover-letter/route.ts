@@ -3,15 +3,19 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 import { createServerClient } from '@/lib/supabase-server'
 
 export async function POST(req: NextRequest) {
-  // Vérifie que l'utilisateur est connecté et Pro
   const supabase = await createServerClient()
   const { data: { session } } = await supabase.auth.getSession()
   if (!session) return NextResponse.json({ error: 'Non authentifié' }, { status: 401 })
 
   const { data: profile } = await supabase
-    .from('profiles').select('is_pro').eq('id', session.user.id).single()
-  if (!profile?.is_pro) {
-    return NextResponse.json({ error: 'Fonctionnalité réservée au plan Pro' }, { status: 403 })
+    .from('profiles')
+    .select('is_pro, free_letter_used')
+    .eq('id', session.user.id)
+    .single()
+
+  // Bloqué si : pas Pro ET crédit gratuit déjà utilisé
+  if (!profile?.is_pro && profile?.free_letter_used) {
+    return NextResponse.json({ error: 'UPGRADE_REQUIRED' }, { status: 403 })
   }
 
   const { entreprise, poste, description, profil } = await req.json()
@@ -41,7 +45,16 @@ Consignes :
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
     const result = await model.generateContent(prompt)
     const letter = result.response.text().trim()
-    return NextResponse.json({ letter })
+
+    // Marquer le crédit gratuit comme utilisé si l'utilisateur n'est pas Pro
+    if (!profile?.is_pro) {
+      await supabase
+        .from('profiles')
+        .update({ free_letter_used: true })
+        .eq('id', session.user.id)
+    }
+
+    return NextResponse.json({ letter, usedFreeCredit: !profile?.is_pro })
   } catch (err) {
     console.error('[AI] Erreur génération lettre:', err)
     return NextResponse.json({ error: "La génération a échoué. Réessaie dans quelques instants." }, { status: 500 })

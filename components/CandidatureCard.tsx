@@ -171,8 +171,8 @@ export default function CandidatureCard({ candidature, onEdit, onDelete, onCover
         {statut.label}
       </span>
 
-      {/* Bouton lettre de motivation (Pro) */}
-      {isPro && onCoverLetter && (
+      {/* Bouton lettre de motivation — visible pour tous */}
+      {onCoverLetter && (
         <button
           onClick={() => onCoverLetter(candidature)}
           title="Générer une lettre de motivation"

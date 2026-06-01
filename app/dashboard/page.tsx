@@ -221,17 +221,14 @@ export default function DashboardPage() {
         <Logo />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          {isPro && (
-            <>
-              <button
-                onClick={() => setCvModalOpen(true)}
-                className="btn-secondary"
-                style={{ fontSize: 12, padding: '7px 14px' }}
-              >
-                ✨ Analyser mon CV
-              </button>
-            </>
-          )}
+          {/* Bouton analyse CV — visible pour tous */}
+          <button
+            onClick={() => setCvModalOpen(true)}
+            className="btn-secondary"
+            style={{ fontSize: 12, padding: '7px 14px' }}
+          >
+            ✨ Analyser mon CV
+          </button>
 
           {!isPro && (
             <Link
@@ -506,6 +503,7 @@ export default function DashboardPage() {
       <CVAnalysisModal
         isOpen={cvModalOpen}
         onClose={() => setCvModalOpen(false)}
+        isPro={isPro}
       />
 
       {/* Modale lettre de motivation */}
@@ -513,6 +511,7 @@ export default function DashboardPage() {
         isOpen={coverLetterModalOpen}
         onClose={() => { setCoverLetterModalOpen(false); setCoverLetterCandidature(null) }}
         candidature={coverLetterCandidature}
+        isPro={isPro}
       />
 
       {/* Dialog suppression */}
