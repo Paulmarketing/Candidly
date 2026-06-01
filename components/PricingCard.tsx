@@ -79,9 +79,9 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
               '✅ Candidatures illimitées',
               '✅ Rappels email automatiques',
               '✅ Export CSV',
-              '✨ Analyse de CV par IA',
-              '✨ Lettre de motivation IA',
-              '✅ Support prioritaire',
+              '✨ Analyse de CV par IA illimitée',
+              '✨ Lettre de motivation IA illimitée',
+              '✨ Préparation aux entretiens IA',
             ]
           : [
               '✅ Jusqu\'à 10 candidatures',
@@ -89,6 +89,7 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
               '✅ Export CSV',
               '🎁 1 analyse CV gratuite',
               '🎁 1 lettre de motivation gratuite',
+              '🎁 1 préparation entretien gratuite',
               '⬜ Rappels email (Pro)',
             ]
         ).map((feature, i) => (

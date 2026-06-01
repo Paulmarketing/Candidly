@@ -14,6 +14,7 @@ import ReminderBanner from '@/components/ReminderBanner'
 import ConfirmDialog from '@/components/ConfirmDialog'
 import CVAnalysisModal from '@/components/CVAnalysisModal'
 import CoverLetterModal from '@/components/CoverLetterModal'
+import InterviewPrepModal from '@/components/InterviewPrepModal'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -32,6 +33,8 @@ export default function DashboardPage() {
   const [cvModalOpen, setCvModalOpen] = useState(false)
   const [coverLetterModalOpen, setCoverLetterModalOpen] = useState(false)
   const [coverLetterCandidature, setCoverLetterCandidature] = useState<Candidature | null>(null)
+  const [interviewModalOpen, setInterviewModalOpen] = useState(false)
+  const [interviewCandidature, setInterviewCandidature] = useState<Candidature | null>(null)
 
   // Filtres
   const [searchQuery, setSearchQuery] = useState('')
@@ -479,6 +482,10 @@ export default function DashboardPage() {
                   setCoverLetterCandidature(cand)
                   setCoverLetterModalOpen(true)
                 }}
+                onInterviewPrep={(cand) => {
+                  setInterviewCandidature(cand)
+                  setInterviewModalOpen(true)
+                }}
                 isPro={isPro}
               />
             ))}
@@ -511,6 +518,14 @@ export default function DashboardPage() {
         isOpen={coverLetterModalOpen}
         onClose={() => { setCoverLetterModalOpen(false); setCoverLetterCandidature(null) }}
         candidature={coverLetterCandidature}
+        isPro={isPro}
+      />
+
+      {/* Modale préparation entretien */}
+      <InterviewPrepModal
+        isOpen={interviewModalOpen}
+        onClose={() => { setInterviewModalOpen(false); setInterviewCandidature(null) }}
+        candidature={interviewCandidature}
         isPro={isPro}
       />
 
