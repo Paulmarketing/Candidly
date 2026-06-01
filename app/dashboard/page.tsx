@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createBrowserClient } from '@/lib/supabase'
 import type { Candidature, CandidatureInsert, Statut, Stats } from '@/types'
+// Statut est utilisé dans handleStatusChange
 import { STATUTS, STATUT_STYLES } from '@/types'
 import Logo from '@/components/Logo'
 import StatsGrid from '@/components/StatsGrid'
@@ -15,6 +16,7 @@ import ConfirmDialog from '@/components/ConfirmDialog'
 import CVAnalysisModal from '@/components/CVAnalysisModal'
 import CoverLetterModal from '@/components/CoverLetterModal'
 import InterviewPrepModal from '@/components/InterviewPrepModal'
+import KanbanView from '@/components/KanbanView'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -35,6 +37,7 @@ export default function DashboardPage() {
   const [coverLetterCandidature, setCoverLetterCandidature] = useState<Candidature | null>(null)
   const [interviewModalOpen, setInterviewModalOpen] = useState(false)
   const [interviewCandidature, setInterviewCandidature] = useState<Candidature | null>(null)
+  const [view, setView] = useState<'liste' | 'kanban'>('liste')
 
   // Filtres
   const [searchQuery, setSearchQuery] = useState('')
@@ -144,6 +147,12 @@ export default function DashboardPage() {
     setDeleteId(null)
     setDeleteLoading(false)
   }, [deleteId, supabase])
+
+  // Changement de statut (drag & drop Kanban)
+  const handleStatusChange = useCallback(async (id: string, newStatus: Statut) => {
+    setCandidatures(prev => prev.map(c => c.id === id ? { ...c, statut: newStatus } : c))
+    await supabase.from('candidatures').update({ statut: newStatus, updated_at: new Date().toISOString() }).eq('id', id)
+  }, [supabase])
 
   // Export CSV
   const handleExportCSV = useCallback(() => {
@@ -324,7 +333,30 @@ export default function DashboardPage() {
               )}
             </p>
           </div>
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+            {/* Toggle liste / kanban */}
+            <div style={{ display: 'flex', background: 'rgba(255,255,255,0.5)', border: '1px solid var(--glass-border)', borderRadius: 10, padding: 3, gap: 2 }}>
+              {(['liste', 'kanban'] as const).map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  title={v === 'liste' ? 'Vue liste' : 'Vue Kanban'}
+                  style={{
+                    padding: '5px 12px',
+                    borderRadius: 8,
+                    border: 'none',
+                    background: view === v ? 'white' : 'transparent',
+                    boxShadow: view === v ? '0 1px 4px rgba(80,90,140,0.12)' : 'none',
+                    cursor: 'pointer',
+                    fontSize: 14,
+                    transition: 'all 0.15s',
+                  }}
+                >
+                  {v === 'liste' ? '☰' : '⊞'}
+                </button>
+              ))}
+            </div>
+
             <button
               onClick={handleExportCSV}
               className="btn-secondary"
@@ -432,8 +464,23 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Liste des candidatures */}
-        {filtered.length === 0 ? (
+        {/* Vue Kanban */}
+        {view === 'kanban' && (
+          <div style={{ marginBottom: 24 }}>
+            <KanbanView
+              candidatures={candidatures}
+              isPro={isPro}
+              onStatusChange={handleStatusChange}
+              onEdit={(cand) => { setEditingCandidature(cand); setModalOpen(true) }}
+              onDelete={(id) => setDeleteId(id)}
+              onCoverLetter={(cand) => { setCoverLetterCandidature(cand); setCoverLetterModalOpen(true) }}
+              onInterviewPrep={(cand) => { setInterviewCandidature(cand); setInterviewModalOpen(true) }}
+            />
+          </div>
+        )}
+
+        {/* Vue liste */}
+        {view === 'liste' && (filtered.length === 0 ? (
           <div
             className="glass-card"
             style={{
@@ -490,7 +537,7 @@ export default function DashboardPage() {
               />
             ))}
           </div>
-        )}
+        ))}
       </div>
 
       {/* Modale ajout/modification */}
