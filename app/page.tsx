@@ -96,83 +96,90 @@ export default function LandingPage() {
 
       {/* Screenshot / Preview */}
       <section style={{ maxWidth: 960, margin: '0 auto 100px' }}>
-        <div
-          className="glass-card"
-          style={{
-            padding: '24px',
-            background: 'rgba(255,255,255,0.45)',
-          }}
-        >
-          {/* Mini dashboard preview */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
+        <div className="glass-card" style={{ padding: '20px', background: 'rgba(255,255,255,0.45)' }}>
+
+          {/* Barre titre fenêtre */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
             <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#f25f5c' }} />
             <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#f5a623' }} />
             <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#34c98a' }} />
-            <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--text3)' }}>candidly.app — Dashboard</span>
+            <span style={{ marginLeft: 8, fontSize: 12, color: 'var(--text3)' }}>candidlyapp.fr — Dashboard</span>
           </div>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: 12,
-              marginBottom: 20,
-            }}
-          >
+
+          {/* Topbar simulée */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
+            <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text1)' }}>Mes candidatures</span>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 10, padding: '4px 10px', borderRadius: 8, border: '1px solid rgba(91,124,246,0.2)', background: 'rgba(91,124,246,0.06)', color: 'var(--accent)', fontWeight: 500 }}>✨ Analyser mon CV</span>
+              <span style={{ fontSize: 10, padding: '4px 10px', borderRadius: 8, border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.5)', color: 'var(--text2)' }}>☰ ⊞</span>
+              <span style={{ fontSize: 10, padding: '4px 10px', borderRadius: 8, border: 'none', background: 'linear-gradient(135deg,#5b7cf6,#9b8ef8)', color: 'white', fontWeight: 500 }}>+ Ajouter</span>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, marginBottom: 16 }}>
             {[
-              { label: 'Total', value: '24', icon: '📋' },
-              { label: 'En cours', value: '12', icon: '⏳' },
-              { label: 'Entretiens', value: '5', icon: '🎯' },
-              { label: 'Acceptées', value: '2', icon: '✅' },
-              { label: 'Taux succès', value: '8%', icon: '📈' },
+              { label: 'Total', value: '24' },
+              { label: 'En cours', value: '12' },
+              { label: 'Entretiens', value: '5' },
+              { label: 'Acceptées', value: '2' },
+              { label: 'Taux succès', value: '8%' },
             ].map((stat) => (
-              <div
-                key={stat.label}
-                className="glass-card-secondary"
-                style={{ padding: '16px 18px' }}
-              >
-                <p style={{ fontSize: 10, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500 }}>
-                  {stat.label}
-                </p>
-                <p style={{ fontSize: 24, fontWeight: 600, color: 'var(--text1)', marginTop: 4 }}>
-                  {stat.value}
-                </p>
+              <div key={stat.label} className="glass-card-secondary" style={{ padding: '12px 14px' }}>
+                <p style={{ fontSize: 9, color: 'var(--text3)', textTransform: 'uppercase', letterSpacing: '0.06em', fontWeight: 500 }}>{stat.label}</p>
+                <p style={{ fontSize: 20, fontWeight: 600, color: 'var(--text1)', marginTop: 2 }}>{stat.value}</p>
               </div>
             ))}
           </div>
+
+          {/* Candidatures avec boutons IA */}
           {[
-            { entreprise: 'Airbus', poste: 'Stage Ingénieur Aéro', statut: 'Entretien', color: 'rgba(155,142,248,0.15)', textColor: '#3C3489' },
-            { entreprise: 'Decathlon', poste: 'Stage Marketing Digital', statut: 'Relance', color: 'rgba(245,166,35,0.12)', textColor: '#854F0B' },
-            { entreprise: 'BNP Paribas', poste: 'Alternance Finance', statut: 'Envoyé', color: 'rgba(91,124,246,0.12)', textColor: '#185FA5' },
+            { entreprise: 'Airbus', poste: 'Stage Ingénieur Aéro', statut: 'Entretien', color: 'rgba(155,142,248,0.15)', textColor: '#3C3489', date: '12 juin' },
+            { entreprise: 'Decathlon', poste: 'Stage Marketing Digital', statut: 'Relance', color: 'rgba(245,166,35,0.12)', textColor: '#854F0B', date: '8 juin' },
+            { entreprise: 'BNP Paribas', poste: 'Alternance Finance', statut: 'Envoyé', color: 'rgba(91,124,246,0.12)', textColor: '#185FA5', date: '3 juin' },
           ].map((c) => (
-            <div
-              key={c.entreprise}
-              className="glass-card"
-              style={{
-                padding: '14px 16px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: 8,
-              }}
-            >
-              <div>
-                <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text1)' }}>{c.entreprise}</p>
-                <p style={{ fontSize: 12, color: 'var(--text2)' }}>{c.poste}</p>
+            <div key={c.entreprise} className="glass-card" style={{ padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: 120 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text1)' }}>{c.entreprise}</p>
+                <p style={{ fontSize: 11, color: 'var(--text2)' }}>{c.poste}</p>
               </div>
-              <span
-                style={{
-                  background: c.color,
-                  color: c.textColor,
-                  padding: '4px 12px',
-                  borderRadius: 40,
-                  fontSize: 12,
-                  fontWeight: 500,
-                }}
-              >
-                {c.statut}
-              </span>
+              <span style={{ fontSize: 10, color: 'var(--text3)' }}>📅 {c.date}</span>
+              <span style={{ background: c.color, color: c.textColor, padding: '3px 10px', borderRadius: 40, fontSize: 11, fontWeight: 500, whiteSpace: 'nowrap' }}>{c.statut}</span>
+              {/* Boutons IA */}
+              <span style={{ fontSize: 10, padding: '3px 8px', borderRadius: 6, border: '1px solid rgba(52,201,138,0.25)', background: 'rgba(52,201,138,0.08)', color: 'var(--success)', fontWeight: 500, whiteSpace: 'nowrap' }}>🎯 Entretien</span>
+              <span style={{ fontSize: 10, padding: '3px 8px', borderRadius: 6, border: '1px solid rgba(91,124,246,0.25)', background: 'rgba(91,124,246,0.08)', color: 'var(--accent)', fontWeight: 500, whiteSpace: 'nowrap' }}>✨ Lettre</span>
+              <div style={{ display: 'flex', gap: 4 }}>
+                <span style={{ fontSize: 11, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, border: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.5)' }}>✏️</span>
+                <span style={{ fontSize: 11, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 6, border: '1px solid rgba(242,95,92,0.2)', background: 'rgba(242,95,92,0.06)' }}>🗑️</span>
+              </div>
             </div>
           ))}
+
+          {/* Mini Kanban preview */}
+          <div style={{ marginTop: 16, padding: '14px', background: 'rgba(255,255,255,0.3)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.5)' }}>
+            <p style={{ fontSize: 10, color: 'var(--text3)', fontWeight: 500, marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.06em' }}>⊞ Vue Kanban</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
+              {[
+                { statut: 'Envoyé', color: 'rgba(91,124,246,0.12)', textColor: '#185FA5', count: 8 },
+                { statut: 'Relance', color: 'rgba(245,166,35,0.12)', textColor: '#854F0B', count: 5 },
+                { statut: 'Entretien', color: 'rgba(155,142,248,0.15)', textColor: '#3C3489', count: 5 },
+                { statut: 'Accepté', color: 'rgba(52,201,138,0.12)', textColor: '#3B6D11', count: 2 },
+                { statut: 'Refusé', color: 'rgba(242,95,92,0.12)', textColor: '#791F1F', count: 4 },
+              ].map((col) => (
+                <div key={col.statut}>
+                  <div style={{ background: col.color, borderRadius: 8, padding: '5px 8px', marginBottom: 6, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span style={{ fontSize: 9, fontWeight: 600, color: col.textColor }}>{col.statut}</span>
+                    <span style={{ fontSize: 9, fontWeight: 700, color: col.textColor, background: 'rgba(255,255,255,0.6)', borderRadius: 10, padding: '1px 5px' }}>{col.count}</span>
+                  </div>
+                  <div style={{ background: 'rgba(255,255,255,0.5)', borderRadius: 6, padding: '6px 8px', border: '1px solid var(--glass-border)' }}>
+                    <div style={{ height: 6, background: col.color, borderRadius: 4, marginBottom: 4 }} />
+                    <div style={{ height: 4, background: 'rgba(136,144,176,0.15)', borderRadius: 4, width: '70%' }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
