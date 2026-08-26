@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Logo from '@/components/Logo'
 import PricingCard from '@/components/PricingCard'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function LandingPage() {
   return (
@@ -19,7 +20,8 @@ export default function LandingPage() {
         }}
       >
         <Logo />
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+          <ThemeToggle />
           <Link href="/login" className="btn-secondary" style={{ fontSize: 13 }}>
             Se connecter
           </Link>

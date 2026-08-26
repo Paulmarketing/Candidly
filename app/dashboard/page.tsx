@@ -17,6 +17,8 @@ import CVAnalysisModal from '@/components/CVAnalysisModal'
 import CoverLetterModal from '@/components/CoverLetterModal'
 import InterviewPrepModal from '@/components/InterviewPrepModal'
 import KanbanView from '@/components/KanbanView'
+import CalendarView from '@/components/CalendarView'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -37,7 +39,7 @@ export default function DashboardPage() {
   const [coverLetterCandidature, setCoverLetterCandidature] = useState<Candidature | null>(null)
   const [interviewModalOpen, setInterviewModalOpen] = useState(false)
   const [interviewCandidature, setInterviewCandidature] = useState<Candidature | null>(null)
-  const [view, setView] = useState<'liste' | 'kanban'>('liste')
+  const [view, setView] = useState<'liste' | 'kanban' | 'calendrier'>('liste')
 
   // Filtres
   const [searchQuery, setSearchQuery] = useState('')
@@ -156,13 +158,14 @@ export default function DashboardPage() {
 
   // Export CSV
   const handleExportCSV = useCallback(() => {
-    const headers = ['Entreprise', 'Poste', 'Statut', 'Date envoi', 'Date rappel', 'Lien', 'Notes']
+    const headers = ['Entreprise', 'Poste', 'Statut', 'Date envoi', 'Date rappel', 'Date entretien', 'Lien', 'Notes']
     const rows = candidatures.map((c) => [
       c.entreprise,
       c.poste,
       c.statut,
       c.date_envoi || '',
       c.date_rappel || '',
+      c.date_entretien || '',
       c.lien_offre || '',
       (c.notes || '').replace(/\n/g, ' '),
     ])
@@ -298,6 +301,8 @@ export default function DashboardPage() {
             <span>{userName}</span>
           </div>
 
+          <ThemeToggle />
+
           <button
             onClick={handleLogout}
             className="btn-secondary"
@@ -334,13 +339,17 @@ export default function DashboardPage() {
             </p>
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-            {/* Toggle liste / kanban */}
+            {/* Toggle liste / kanban / calendrier */}
             <div style={{ display: 'flex', background: 'rgba(255,255,255,0.5)', border: '1px solid var(--glass-border)', borderRadius: 10, padding: 3, gap: 2 }}>
-              {(['liste', 'kanban'] as const).map((v) => (
+              {([
+                { v: 'liste', icon: '☰', label: 'Vue liste' },
+                { v: 'kanban', icon: '⊞', label: 'Vue Kanban' },
+                { v: 'calendrier', icon: '📅', label: 'Calendrier' },
+              ] as const).map(({ v, icon, label }) => (
                 <button
                   key={v}
                   onClick={() => setView(v)}
-                  title={v === 'liste' ? 'Vue liste' : 'Vue Kanban'}
+                  title={label}
                   style={{
                     padding: '5px 12px',
                     borderRadius: 8,
@@ -352,7 +361,7 @@ export default function DashboardPage() {
                     transition: 'all 0.15s',
                   }}
                 >
-                  {v === 'liste' ? '☰' : '⊞'}
+                  {icon}
                 </button>
               ))}
             </div>
@@ -390,8 +399,8 @@ export default function DashboardPage() {
           <StatsGrid stats={stats} />
         </div>
 
-        {/* Filtres */}
-        <div
+        {/* Filtres (masqués en vue calendrier) */}
+        {view !== 'calendrier' && <div
           className="glass-card-secondary"
           style={{
             display: 'flex',
@@ -462,7 +471,18 @@ export default function DashboardPage() {
               )
             })}
           </div>
-        </div>
+        </div>}
+
+        {/* Vue Calendrier */}
+        {view === 'calendrier' && (
+          <div style={{ marginBottom: 24 }}>
+            <CalendarView
+              candidatures={candidatures}
+              onEdit={(cand) => { setEditingCandidature(cand); setModalOpen(true) }}
+              onInterviewPrep={(cand) => { setInterviewCandidature(cand); setInterviewModalOpen(true) }}
+            />
+          </div>
+        )}
 
         {/* Vue Kanban */}
         {view === 'kanban' && (

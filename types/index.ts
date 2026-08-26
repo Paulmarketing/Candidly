@@ -8,6 +8,7 @@ export interface Candidature {
   statut: Statut
   date_envoi: string | null
   date_rappel: string | null
+  date_entretien: string | null
   lien_offre: string | null
   notes: string | null
   created_at: string
@@ -33,31 +34,31 @@ export interface Stats {
   taux_succes: number
 }
 
-// Badge couleurs par statut
+// Badge couleurs par statut — utilisent des CSS variables pour le support dark mode
 export const STATUT_STYLES: Record<Statut, { bg: string; text: string; label: string }> = {
   'Envoyé': {
-    bg: 'rgba(91,124,246,0.12)',
-    text: '#185FA5',
+    bg: 'var(--statut-envoye-bg)',
+    text: 'var(--statut-envoye-text)',
     label: 'Envoyé',
   },
   'Relance': {
-    bg: 'rgba(245,166,35,0.12)',
-    text: '#854F0B',
+    bg: 'var(--statut-relance-bg)',
+    text: 'var(--statut-relance-text)',
     label: 'Relance',
   },
   'Entretien': {
-    bg: 'rgba(155,142,248,0.15)',
-    text: '#3C3489',
+    bg: 'var(--statut-entretien-bg)',
+    text: 'var(--statut-entretien-text)',
     label: 'Entretien',
   },
   'Accepté': {
-    bg: 'rgba(52,201,138,0.12)',
-    text: '#3B6D11',
+    bg: 'var(--statut-accepte-bg)',
+    text: 'var(--statut-accepte-text)',
     label: 'Accepté',
   },
   'Refusé': {
-    bg: 'rgba(242,95,92,0.12)',
-    text: '#791F1F',
+    bg: 'var(--statut-refuse-bg)',
+    text: 'var(--statut-refuse-text)',
     label: 'Refusé',
   },
 }

@@ -19,6 +19,7 @@ const EMPTY_FORM: CandidatureInsert = {
   statut: 'Envoyé',
   date_envoi: new Date().toISOString().split('T')[0],
   date_rappel: null,
+  date_entretien: null,
   lien_offre: null,
   notes: null,
 }
@@ -45,6 +46,7 @@ export default function AddModal({
         statut: editingCandidature.statut,
         date_envoi: editingCandidature.date_envoi,
         date_rappel: editingCandidature.date_rappel,
+        date_entretien: editingCandidature.date_entretien,
         lien_offre: editingCandidature.lien_offre,
         notes: editingCandidature.notes,
       })
@@ -63,8 +65,8 @@ export default function AddModal({
       return
     }
 
-    if (!isPro && !isEditing && currentCount >= 5) {
-      setError('Limite du plan gratuit atteinte (5 candidatures). Passe à Pro pour continuer.')
+    if (!isPro && !isEditing && currentCount >= 10) {
+      setError('Limite du plan gratuit atteinte (10 candidatures). Passe à Pro pour continuer.')
       return
     }
 
@@ -76,6 +78,7 @@ export default function AddModal({
         lien_offre: form.lien_offre?.trim() || null,
         notes: form.notes?.trim() || null,
         date_rappel: form.date_rappel || null,
+        date_entretien: form.date_entretien || null,
       })
       onClose()
     } catch {
@@ -216,6 +219,24 @@ export default function AddModal({
               />
             </div>
           </div>
+
+          {/* Date entretien (visible quand statut Entretien) */}
+          {form.statut === 'Entretien' && (
+            <div style={{ background: 'rgba(155,142,248,0.08)', border: '1px solid rgba(155,142,248,0.2)', borderRadius: 12, padding: '14px 16px' }}>
+              <label className="glass-input-label" style={{ color: '#3C3489', marginBottom: 6 }}>
+                🎯 Date de l&apos;entretien
+              </label>
+              <input
+                className="glass-input"
+                type="date"
+                value={form.date_entretien || ''}
+                onChange={(e) => updateField('date_entretien', e.target.value || null)}
+              />
+              <p style={{ fontSize: 11, color: 'var(--text3)', marginTop: 6 }}>
+                Visible dans le calendrier d&apos;entretiens
+              </p>
+            </div>
+          )}
 
           {/* Lien offre */}
           <div>

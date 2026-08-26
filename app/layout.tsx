@@ -15,6 +15,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
+      <head>
+        {/* Script inline pour appliquer le thème avant le rendu — évite le flash */}
+        <script dangerouslySetInnerHTML={{ __html: `
+          try {
+            var t = localStorage.getItem('theme');
+            if (t === 'dark' || t === 'light') {
+              document.documentElement.setAttribute('data-theme', t);
+            }
+          } catch(e) {}
+        ` }} />
+      </head>
       <body>
         {children}
         <CookieBanner />
