@@ -17,6 +17,19 @@ export interface Candidature {
 
 export type CandidatureInsert = Omit<Candidature, 'id' | 'user_id' | 'created_at' | 'updated_at'>
 
+export interface Contact {
+  id: string
+  user_id: string
+  prenom: string
+  nom: string
+  poste: string | null
+  entreprise: string | null
+  linkedin_url: string | null
+  email: string | null
+  notes: string | null
+  created_at: string
+}
+
 export interface Profile {
   id: string
   full_name: string | null

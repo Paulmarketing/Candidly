@@ -35,6 +35,40 @@ export default function AddModal({
   const [form, setForm] = useState<CandidatureInsert>(EMPTY_FORM)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  // Import depuis URL
+  const [importUrl, setImportUrl] = useState('')
+  const [showImport, setShowImport] = useState(false)
+  const [importing, setImporting] = useState(false)
+  const [importError, setImportError] = useState('')
+  const [importedJob, setImportedJob] = useState<{ contrat?: string; lieu?: string } | null>(null)
+
+  const handleImportUrl = async () => {
+    if (!importUrl.trim()) return
+    setImporting(true)
+    setImportError('')
+    try {
+      const res = await fetch('/api/ai/extract-job', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: importUrl.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setImportError(data.error || 'Erreur'); return }
+      setForm(prev => ({
+        ...prev,
+        entreprise: data.entreprise || prev.entreprise,
+        poste: data.poste || prev.poste,
+        notes: data.notes || prev.notes,
+        lien_offre: data.lien_offre || prev.lien_offre,
+      }))
+      setImportedJob({ contrat: data.contrat, lieu: data.lieu })
+      setShowImport(false)
+    } catch {
+      setImportError('Erreur réseau.')
+    } finally {
+      setImporting(false)
+    }
+  }
 
   const isEditing = !!editingCandidature
 
@@ -135,6 +169,51 @@ export default function AddModal({
             ×
           </button>
         </div>
+
+        {/* Import depuis URL */}
+        {!isEditing && (
+          <div style={{ marginBottom: 20 }}>
+            {!showImport ? (
+              <button
+                type="button"
+                onClick={() => setShowImport(true)}
+                style={{ fontSize: 13, color: 'var(--accent)', background: 'rgba(91,124,246,0.08)', border: '1px solid rgba(91,124,246,0.18)', borderRadius: 10, padding: '9px 16px', cursor: 'pointer', fontWeight: 500, width: '100%', display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}
+              >
+                📋 Importer depuis une offre d&apos;emploi
+              </button>
+            ) : (
+              <div style={{ background: 'rgba(91,124,246,0.06)', border: '1px solid rgba(91,124,246,0.15)', borderRadius: 12, padding: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text1)' }}>📋 Importer une offre</p>
+                <p style={{ fontSize: 12, color: 'var(--text3)' }}>Colle l&apos;URL d&apos;une offre (Welcome to the Jungle, LinkedIn, Indeed…) et l&apos;IA remplira le formulaire.</p>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <input
+                    className="glass-input"
+                    type="url"
+                    placeholder="https://www.welcometothejungle.com/..."
+                    value={importUrl}
+                    onChange={e => setImportUrl(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && handleImportUrl()}
+                    autoFocus
+                  />
+                  <button type="button" className="btn-primary" style={{ fontSize: 13, padding: '8px 16px', whiteSpace: 'nowrap' }} onClick={handleImportUrl} disabled={importing || !importUrl.trim()}>
+                    {importing ? '…' : 'Importer'}
+                  </button>
+                  <button type="button" onClick={() => { setShowImport(false); setImportError('') }} style={{ fontSize: 13, padding: '8px 12px', borderRadius: 10, border: '1px solid var(--glass-border)', background: 'var(--btn-secondary-bg)', color: 'var(--text2)', cursor: 'pointer' }}>✕</button>
+                </div>
+                {importError && <p style={{ fontSize: 12, color: 'var(--danger)' }}>{importError}</p>}
+              </div>
+            )}
+            {importedJob && (
+              <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 11, background: 'rgba(52,201,138,0.1)', color: 'var(--success)', border: '1px solid rgba(52,201,138,0.2)', borderRadius: 20, padding: '3px 10px', fontWeight: 500 }}>
+                  ✅ Offre importée
+                </span>
+                {importedJob.contrat && <span style={{ fontSize: 11, background: 'rgba(91,124,246,0.1)', color: 'var(--accent)', border: '1px solid rgba(91,124,246,0.2)', borderRadius: 20, padding: '3px 10px' }}>{importedJob.contrat}</span>}
+                {importedJob.lieu && <span style={{ fontSize: 11, background: 'rgba(136,144,176,0.1)', color: 'var(--text2)', border: '1px solid var(--glass-border)', borderRadius: 20, padding: '3px 10px' }}>📍 {importedJob.lieu}</span>}
+              </div>
+            )}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {/* Entreprise */}

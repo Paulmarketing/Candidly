@@ -19,6 +19,8 @@ import InterviewPrepModal from '@/components/InterviewPrepModal'
 import KanbanView from '@/components/KanbanView'
 import CalendarView from '@/components/CalendarView'
 import ThemeToggle from '@/components/ThemeToggle'
+import SectionNav, { type AppSection } from '@/components/SectionNav'
+import NetworkingSection from '@/components/networking/NetworkingSection'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -40,6 +42,7 @@ export default function DashboardPage() {
   const [interviewModalOpen, setInterviewModalOpen] = useState(false)
   const [interviewCandidature, setInterviewCandidature] = useState<Candidature | null>(null)
   const [view, setView] = useState<'liste' | 'kanban' | 'calendrier'>('liste')
+  const [section, setSection] = useState<AppSection>('candidatures')
 
   // Filtres
   const [searchQuery, setSearchQuery] = useState('')
@@ -314,6 +317,17 @@ export default function DashboardPage() {
       </header>
 
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        {/* Navigation principale */}
+        <SectionNav current={section} onChange={setSection} />
+
+        {/* Section Networking */}
+        {section === 'networking' && (
+          <NetworkingSection userId={userId} isPro={isPro} />
+        )}
+
+        {/* Section Candidatures */}
+        {section === 'candidatures' && <>
+
         {/* Titre + actions */}
         <div
           style={{
@@ -558,6 +572,9 @@ export default function DashboardPage() {
             ))}
           </div>
         ))}
+
+        {/* Fin section candidatures */}
+        </>}
       </div>
 
       {/* Modale ajout/modification */}
