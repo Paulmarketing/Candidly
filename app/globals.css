@@ -25,6 +25,13 @@
   --input-border: rgba(255, 255, 255, 0.7);
   --overlay-bg: rgba(26, 26, 46, 0.35);
   --scrollbar-thumb: rgba(91, 124, 246, 0.25);
+  /* Toggles et pills de filtre */
+  --toggle-bg: rgba(255, 255, 255, 0.5);
+  --toggle-active-bg: #ffffff;
+  --toggle-active-shadow: 0 1px 4px rgba(80, 90, 140, 0.12);
+  --pill-inactive-bg: rgba(255, 255, 255, 0.4);
+  --pill-inactive-text: var(--text3);
+  --border-subtle: rgba(136, 144, 176, 0.2);
 }
 
 /* ─── Variables CSS — Mode sombre ──────────────────────────── */
@@ -50,6 +57,12 @@
     --input-border: rgba(255, 255, 255, 0.12);
     --overlay-bg: rgba(0, 0, 10, 0.65);
     --scrollbar-thumb: rgba(110, 143, 247, 0.3);
+    --toggle-bg: rgba(255, 255, 255, 0.06);
+    --toggle-active-bg: rgba(255, 255, 255, 0.15);
+    --toggle-active-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+    --pill-inactive-bg: rgba(255, 255, 255, 0.07);
+    --pill-inactive-text: var(--text2);
+    --border-subtle: rgba(255, 255, 255, 0.10);
   }
 }
 
@@ -74,6 +87,12 @@
   --input-border: rgba(255, 255, 255, 0.12);
   --overlay-bg: rgba(0, 0, 10, 0.65);
   --scrollbar-thumb: rgba(110, 143, 247, 0.3);
+  --toggle-bg: rgba(255, 255, 255, 0.06);
+  --toggle-active-bg: rgba(255, 255, 255, 0.15);
+  --toggle-active-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  --pill-inactive-bg: rgba(255, 255, 255, 0.07);
+  --pill-inactive-text: var(--text2);
+  --border-subtle: rgba(255, 255, 255, 0.10);
 }
 
 /* ─── Reset & base ──────────────────────────────────────────── */

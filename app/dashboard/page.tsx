@@ -292,7 +292,7 @@ export default function DashboardPage() {
               display: 'flex',
               alignItems: 'center',
               gap: 8,
-              background: 'rgba(255,255,255,0.5)',
+              background: 'var(--toggle-bg)',
               border: '1px solid var(--glass-border)',
               borderRadius: 40,
               padding: '6px 14px',
@@ -354,7 +354,7 @@ export default function DashboardPage() {
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             {/* Toggle liste / kanban / calendrier */}
-            <div style={{ display: 'flex', background: 'rgba(255,255,255,0.5)', border: '1px solid var(--glass-border)', borderRadius: 10, padding: 3, gap: 2 }}>
+            <div style={{ display: 'flex', background: 'var(--toggle-bg)', border: '1px solid var(--glass-border)', borderRadius: 10, padding: 3, gap: 2 }}>
               {([
                 { v: 'liste', icon: '☰', label: 'Vue liste' },
                 { v: 'kanban', icon: '⊞', label: 'Vue Kanban' },
@@ -368,10 +368,11 @@ export default function DashboardPage() {
                     padding: '5px 12px',
                     borderRadius: 8,
                     border: 'none',
-                    background: view === v ? 'white' : 'transparent',
-                    boxShadow: view === v ? '0 1px 4px rgba(80,90,140,0.12)' : 'none',
+                    background: view === v ? 'var(--toggle-active-bg)' : 'transparent',
+                    boxShadow: view === v ? 'var(--toggle-active-shadow)' : 'none',
                     cursor: 'pointer',
                     fontSize: 14,
+                    color: 'var(--text1)',
                     transition: 'all 0.15s',
                   }}
                 >
@@ -463,17 +464,17 @@ export default function DashboardPage() {
                     borderRadius: 40,
                     border: isActive
                       ? `1px solid ${style_info ? style_info.text : 'var(--accent)'}`
-                      : '1px solid rgba(136,144,176,0.2)',
+                      : '1px solid var(--border-subtle)',
                     background: isActive
                       ? style_info
                         ? style_info.bg
                         : 'rgba(91,124,246,0.12)'
-                      : 'rgba(255,255,255,0.4)',
+                      : 'var(--pill-inactive-bg)',
                     color: isActive
                       ? style_info
                         ? style_info.text
                         : 'var(--accent)'
-                      : 'var(--text3)',
+                      : 'var(--pill-inactive-text)',
                     fontSize: 12,
                     fontWeight: isActive ? 500 : 400,
                     cursor: 'pointer',
