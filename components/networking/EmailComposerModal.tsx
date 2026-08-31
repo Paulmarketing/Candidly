@@ -40,6 +40,9 @@ export default function EmailComposerModal({ isOpen, onClose, contacts, defaultC
   const [result, setResult] = useState<{ objet: string; corps: string } | null>(null)
   const [copiedObjet, setCopiedObjet] = useState(false)
   const [copiedCorps, setCopiedCorps] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [sendError, setSendError] = useState('')
+  const [sent, setSent] = useState(false)
 
   const selectedContact = contacts.find(c => c.id === selectedContactId) || null
 
@@ -49,6 +52,28 @@ export default function EmailComposerModal({ isOpen, onClose, contacts, defaultC
     setError('')
     setCopiedObjet(false)
     setCopiedCorps(false)
+    setSendError('')
+    setSent(false)
+  }
+
+  const handleSend = async () => {
+    if (!result || !selectedContact?.email) return
+    setSending(true)
+    setSendError('')
+    try {
+      const res = await fetch('/api/email/send-network', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to: selectedContact.email, objet: result.objet, corps: result.corps }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setSendError(data.error || 'Erreur d\'envoi'); return }
+      setSent(true)
+    } catch {
+      setSendError('Erreur réseau.')
+    } finally {
+      setSending(false)
+    }
   }
 
   const handleClose = () => {
@@ -324,6 +349,41 @@ export default function EmailComposerModal({ isOpen, onClose, contacts, defaultC
             >
               {copiedCorps ? '✅ Tout copié !' : '📋 Tout copier (objet + corps)'}
             </button>
+
+            {/* Envoi direct */}
+            {sent ? (
+              <div style={{ textAlign: 'center', padding: '20px', background: 'rgba(52,201,138,0.08)', border: '1px solid rgba(52,201,138,0.2)', borderRadius: 14 }}>
+                <p style={{ fontSize: 28, marginBottom: 8 }}>✅</p>
+                <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--success)' }}>Email envoyé !</p>
+                <p style={{ fontSize: 12, color: 'var(--text3)', marginTop: 4 }}>
+                  Reçu par {selectedContact?.email} · Réponses vers ton adresse Candidly
+                </p>
+              </div>
+            ) : selectedContact?.email ? (
+              <div style={{ border: '1px solid var(--glass-border)', borderRadius: 14, overflow: 'hidden' }}>
+                <div style={{ padding: '14px 18px', background: 'rgba(91,124,246,0.05)', borderBottom: '1px solid var(--glass-border)' }}>
+                  <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text1)', marginBottom: 4 }}>📤 Envoyer directement</p>
+                  <p style={{ fontSize: 11, color: 'var(--text3)', lineHeight: 1.5 }}>
+                    L&apos;email sera envoyé depuis <strong>ton prénom via Candidly</strong> avec ton adresse en reply-to — le destinataire peut te répondre directement.
+                  </p>
+                </div>
+                <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: 12, color: 'var(--text2)', flex: 1 }}>→ {selectedContact.email}</span>
+                  {sendError && <p style={{ fontSize: 12, color: 'var(--danger)', width: '100%' }}>{sendError}</p>}
+                  <button
+                    onClick={handleSend}
+                    disabled={sending}
+                    style={{ padding: '9px 20px', borderRadius: 10, border: 'none', background: 'linear-gradient(135deg, var(--accent), var(--purple))', color: '#fff', fontSize: 13, fontWeight: 600, cursor: 'pointer', boxShadow: '0 4px 14px rgba(91,124,246,0.35)', whiteSpace: 'nowrap' }}
+                  >
+                    {sending ? '…' : '📤 Envoyer'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div style={{ padding: '14px 18px', background: 'rgba(136,144,176,0.06)', border: '1px solid var(--glass-border)', borderRadius: 12, fontSize: 12, color: 'var(--text3)', lineHeight: 1.5 }}>
+                💡 Pour envoyer directement, ajoute l&apos;email du contact dans sa fiche.
+              </div>
+            )}
           </div>
         )}
       </div>
