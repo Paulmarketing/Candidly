@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { createBrowserClient } from '@/lib/supabase'
 import type { Contact } from '@/types'
 import AddContactModal from './AddContactModal'
+import EmailComposerModal from './EmailComposerModal'
 import ConfirmDialog from '@/components/ConfirmDialog'
 
 type ContactInsert = Omit<Contact, 'id' | 'user_id' | 'created_at'>
@@ -39,6 +40,8 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
   const [deleteId, setDeleteId] = useState<string | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const [search, setSearch] = useState('')
+  const [emailModalOpen, setEmailModalOpen] = useState(false)
+  const [emailContact, setEmailContact] = useState<Contact | null>(null)
 
   useEffect(() => {
     async function load() {
@@ -109,9 +112,14 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
             {stats.total} contact{stats.total !== 1 ? 's' : ''} · {stats.avecEmail} avec email · {stats.avecLinkedin} avec LinkedIn
           </p>
         </div>
-        <button className="btn-primary" style={{ fontSize: 13 }} onClick={() => { setEditingContact(null); setAddModalOpen(true) }}>
-          + Ajouter un contact
-        </button>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => { setEmailContact(null); setEmailModalOpen(true) }}>
+            ✉️ Composer un email
+          </button>
+          <button className="btn-primary" style={{ fontSize: 13 }} onClick={() => { setEditingContact(null); setAddModalOpen(true) }}>
+            + Ajouter un contact
+          </button>
+        </div>
       </div>
 
       {/* Stats cards */}
@@ -174,20 +182,23 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
               contact={c}
               onEdit={() => { setEditingContact(c); setAddModalOpen(true) }}
               onDelete={() => setDeleteId(c.id)}
+              onEmail={() => { setEmailContact(c); setEmailModalOpen(true) }}
             />
           ))}
         </div>
       )}
 
-      {/* Prochainement : Email composer */}
-      {contacts.length > 0 && (
-        <div className="glass-card" style={{ marginTop: 20, padding: '20px 24px', display: 'flex', alignItems: 'center', gap: 20, opacity: 0.7 }}>
-          <span style={{ fontSize: 36 }}>✉️</span>
-          <div>
-            <p style={{ fontSize: 15, fontWeight: 600, color: 'var(--text1)' }}>Compositeur d&apos;emails IA — bientôt disponible</p>
-            <p style={{ fontSize: 13, color: 'var(--text3)' }}>Génère des emails de candidature, demande de meeting ou relance avec plusieurs tons au choix.</p>
+      {/* CTA email si aucun contact */}
+      {contacts.length === 0 && (
+        <div className="glass-card-secondary" style={{ marginTop: 16, padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+          <span style={{ fontSize: 28 }}>✉️</span>
+          <div style={{ flex: 1 }}>
+            <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text1)' }}>Compose un email sans contact</p>
+            <p style={{ fontSize: 12, color: 'var(--text3)' }}>Tu peux aussi générer un email sans avoir ajouté de contact.</p>
           </div>
-          <span style={{ marginLeft: 'auto', fontSize: 11, background: 'rgba(91,124,246,0.12)', color: 'var(--accent)', padding: '4px 10px', borderRadius: 20, fontWeight: 600, whiteSpace: 'nowrap' }}>Étape 2</span>
+          <button className="btn-secondary" style={{ fontSize: 13, whiteSpace: 'nowrap' }} onClick={() => { setEmailContact(null); setEmailModalOpen(true) }}>
+            ✉️ Composer
+          </button>
         </div>
       )}
 
@@ -196,6 +207,12 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
         onClose={() => { setAddModalOpen(false); setEditingContact(null) }}
         onSave={handleSave}
         editingContact={editingContact}
+      />
+      <EmailComposerModal
+        isOpen={emailModalOpen}
+        onClose={() => { setEmailModalOpen(false); setEmailContact(null) }}
+        contacts={contacts}
+        defaultContact={emailContact}
       />
       <ConfirmDialog
         isOpen={!!deleteId}
@@ -210,7 +227,7 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
   )
 }
 
-function ContactCard({ contact: c, onEdit, onDelete }: { contact: Contact; onEdit: () => void; onDelete: () => void }) {
+function ContactCard({ contact: c, onEdit, onDelete, onEmail }: { contact: Contact; onEdit: () => void; onDelete: () => void; onEmail: () => void }) {
   return (
     <div className="glass-card hover-card" style={{ padding: '20px' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 14 }}>
@@ -266,10 +283,16 @@ function ContactCard({ contact: c, onEdit, onDelete }: { contact: Contact; onEdi
       {/* Actions */}
       <div style={{ display: 'flex', gap: 6 }}>
         <button
-          onClick={onEdit}
-          style={{ flex: 1, fontSize: 12, padding: '7px 12px', borderRadius: 8, border: '1px solid var(--glass-border)', background: 'var(--btn-secondary-bg)', color: 'var(--text2)', cursor: 'pointer', fontWeight: 500 }}
+          onClick={onEmail}
+          style={{ flex: 1, fontSize: 12, padding: '7px 12px', borderRadius: 8, border: '1px solid rgba(91,124,246,0.25)', background: 'rgba(91,124,246,0.08)', color: 'var(--accent)', cursor: 'pointer', fontWeight: 600 }}
         >
-          ✏️ Modifier
+          ✉️ Email IA
+        </button>
+        <button
+          onClick={onEdit}
+          style={{ fontSize: 12, padding: '7px 12px', borderRadius: 8, border: '1px solid var(--glass-border)', background: 'var(--btn-secondary-bg)', color: 'var(--text2)', cursor: 'pointer' }}
+        >
+          ✏️
         </button>
         <button
           onClick={onDelete}
