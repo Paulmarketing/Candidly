@@ -48,8 +48,9 @@ export default function AddModal({
     if (!importUrl.trim()) return
     if (!isPro) {
       try {
-        if (localStorage.getItem(FREE_IMPORT_KEY)) {
-          setImportError('Tu as utilisé ton import gratuit. Passe à Pro pour un accès illimité.')
+        const used = parseInt(localStorage.getItem(FREE_IMPORT_KEY) || '0', 10)
+        if (used >= 10) {
+          setImportError('Tu as utilisé tes 10 imports gratuits. Passe à Pro pour un accès illimité.')
           return
         }
       } catch { /* localStorage indisponible */ }
@@ -64,7 +65,7 @@ export default function AddModal({
       })
       const data = await res.json()
       if (!res.ok) { setImportError(data.error || 'Erreur'); return }
-      if (!isPro) { try { localStorage.setItem(FREE_IMPORT_KEY, '1') } catch { /* ignore */ } }
+      if (!isPro) { try { const n = parseInt(localStorage.getItem(FREE_IMPORT_KEY) || '0', 10); localStorage.setItem(FREE_IMPORT_KEY, String(n + 1)) } catch { /* ignore */ } }
       setForm(prev => ({
         ...prev,
         entreprise: data.entreprise || prev.entreprise,

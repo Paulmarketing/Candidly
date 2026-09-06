@@ -56,7 +56,7 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
     load()
   }, [supabase, userId])
 
-  const FREE_CONTACT_LIMIT = 3
+  const FREE_CONTACT_LIMIT = 10
 
   const handleSave = useCallback(async (data: ContactInsert) => {
     if (editingContact) {
@@ -125,8 +125,8 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
             className="btn-primary"
             style={{ fontSize: 13 }}
             onClick={() => {
-              if (!isPro && contacts.length >= 3) {
-                alert('Limite gratuite atteinte (3 contacts). Passe à Pro pour en ajouter plus.')
+              if (!isPro && contacts.length >= 10) {
+                alert('Limite gratuite atteinte (10 contacts). Passe à Pro pour en ajouter plus.')
                 return
               }
               setEditingContact(null); setAddModalOpen(true)
@@ -224,12 +224,12 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
         editingContact={editingContact}
       />
       {/* Bannière limite gratuit */}
-      {!isPro && contacts.length >= 3 && (
+      {!isPro && contacts.length >= 10 && (
         <div style={{ marginTop: 16, padding: '14px 18px', borderRadius: 12, background: 'rgba(91,124,246,0.07)', border: '1px solid rgba(91,124,246,0.18)', display: 'flex', alignItems: 'center', gap: 12 }}>
           <span style={{ fontSize: 20 }}>🔒</span>
           <div style={{ flex: 1 }}>
             <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text1)' }}>Limite gratuite atteinte</p>
-            <p style={{ fontSize: 12, color: 'var(--text3)' }}>Tu as atteint les 3 contacts du plan gratuit. Passe à Pro pour un réseau illimité.</p>
+            <p style={{ fontSize: 12, color: 'var(--text3)' }}>Tu as atteint les 10 contacts du plan gratuit. Passe à Pro pour un réseau illimité.</p>
           </div>
           <a href="/pricing" className="btn-primary" style={{ fontSize: 12, padding: '8px 16px', whiteSpace: 'nowrap', textDecoration: 'none' }}>Passer à Pro →</a>
         </div>

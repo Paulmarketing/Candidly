@@ -87,8 +87,9 @@ export default function EmailComposerModal({ isOpen, onClose, contacts, defaultC
   const handleGenerate = async () => {
     if (!isPro) {
       try {
-        if (localStorage.getItem(FREE_EMAIL_KEY)) {
-          setError('Tu as utilisé ton email IA gratuit. Passe à Pro pour un accès illimité.')
+        const used = parseInt(localStorage.getItem(FREE_EMAIL_KEY) || '0', 10)
+        if (used >= 5) {
+          setError('Tu as utilisé tes 5 emails IA gratuits. Passe à Pro pour un accès illimité.')
           return
         }
       } catch { /* localStorage indisponible */ }
@@ -114,7 +115,7 @@ export default function EmailComposerModal({ isOpen, onClose, contacts, defaultC
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error || 'Erreur de génération'); return }
-      if (!isPro) { try { localStorage.setItem(FREE_EMAIL_KEY, '1') } catch { /* ignore */ } }
+      if (!isPro) { try { const n = parseInt(localStorage.getItem(FREE_EMAIL_KEY) || '0', 10); localStorage.setItem(FREE_EMAIL_KEY, String(n + 1)) } catch { /* ignore */ } }
       setResult(data)
       setStep('result')
     } catch {
