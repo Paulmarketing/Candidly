@@ -56,6 +56,8 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
     load()
   }, [supabase, userId])
 
+  const FREE_CONTACT_LIMIT = 3
+
   const handleSave = useCallback(async (data: ContactInsert) => {
     if (editingContact) {
       const { data: updated, error } = await supabase
@@ -63,13 +65,16 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
       if (error) throw error
       setContacts(prev => prev.map(c => c.id === editingContact.id ? updated : c))
     } else {
+      if (!isPro && contacts.length >= FREE_CONTACT_LIMIT) {
+        throw new Error(`Limite du plan gratuit atteinte (${FREE_CONTACT_LIMIT} contacts). Passe à Pro pour continuer.`)
+      }
       const { data: created, error } = await supabase
         .from('contacts').insert({ ...data, user_id: userId }).select().single()
       if (error) throw error
       setContacts(prev => [created, ...prev])
     }
     setEditingContact(null)
-  }, [editingContact, supabase, userId])
+  }, [editingContact, isPro, contacts.length, supabase, userId])
 
   const handleDelete = useCallback(async () => {
     if (!deleteId) return
@@ -116,7 +121,17 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
           <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => { setEmailContact(null); setEmailModalOpen(true) }}>
             ✉️ Composer un email
           </button>
-          <button className="btn-primary" style={{ fontSize: 13 }} onClick={() => { setEditingContact(null); setAddModalOpen(true) }}>
+            <button
+            className="btn-primary"
+            style={{ fontSize: 13 }}
+            onClick={() => {
+              if (!isPro && contacts.length >= 3) {
+                alert('Limite gratuite atteinte (3 contacts). Passe à Pro pour en ajouter plus.')
+                return
+              }
+              setEditingContact(null); setAddModalOpen(true)
+            }}
+          >
             + Ajouter un contact
           </button>
         </div>
@@ -208,11 +223,24 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
         onSave={handleSave}
         editingContact={editingContact}
       />
+      {/* Bannière limite gratuit */}
+      {!isPro && contacts.length >= 3 && (
+        <div style={{ marginTop: 16, padding: '14px 18px', borderRadius: 12, background: 'rgba(91,124,246,0.07)', border: '1px solid rgba(91,124,246,0.18)', display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 20 }}>🔒</span>
+          <div style={{ flex: 1 }}>
+            <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text1)' }}>Limite gratuite atteinte</p>
+            <p style={{ fontSize: 12, color: 'var(--text3)' }}>Tu as atteint les 3 contacts du plan gratuit. Passe à Pro pour un réseau illimité.</p>
+          </div>
+          <a href="/pricing" className="btn-primary" style={{ fontSize: 12, padding: '8px 16px', whiteSpace: 'nowrap', textDecoration: 'none' }}>Passer à Pro →</a>
+        </div>
+      )}
+
       <EmailComposerModal
         isOpen={emailModalOpen}
         onClose={() => { setEmailModalOpen(false); setEmailContact(null) }}
         contacts={contacts}
         defaultContact={emailContact}
+        isPro={isPro}
       />
       <ConfirmDialog
         isOpen={!!deleteId}

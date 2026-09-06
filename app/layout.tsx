@@ -20,10 +20,11 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: `
           try {
             var t = localStorage.getItem('theme');
-            if (t === 'dark' || t === 'light') {
-              document.documentElement.setAttribute('data-theme', t);
-            }
-          } catch(e) {}
+            if (!t) { t = 'light'; try { localStorage.setItem('theme', 'light'); } catch(e2) {} }
+            document.documentElement.setAttribute('data-theme', t);
+          } catch(e) {
+            document.documentElement.setAttribute('data-theme', 'light');
+          }
         ` }} />
       </head>
       <body>

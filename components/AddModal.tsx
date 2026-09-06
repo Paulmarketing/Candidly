@@ -42,8 +42,18 @@ export default function AddModal({
   const [importError, setImportError] = useState('')
   const [importedJob, setImportedJob] = useState<{ contrat?: string; lieu?: string } | null>(null)
 
+  const FREE_IMPORT_KEY = 'candidly_free_import_used'
+
   const handleImportUrl = async () => {
     if (!importUrl.trim()) return
+    if (!isPro) {
+      try {
+        if (localStorage.getItem(FREE_IMPORT_KEY)) {
+          setImportError('Tu as utilisé ton import gratuit. Passe à Pro pour un accès illimité.')
+          return
+        }
+      } catch { /* localStorage indisponible */ }
+    }
     setImporting(true)
     setImportError('')
     try {
@@ -54,6 +64,7 @@ export default function AddModal({
       })
       const data = await res.json()
       if (!res.ok) { setImportError(data.error || 'Erreur'); return }
+      if (!isPro) { try { localStorage.setItem(FREE_IMPORT_KEY, '1') } catch { /* ignore */ } }
       setForm(prev => ({
         ...prev,
         entreprise: data.entreprise || prev.entreprise,

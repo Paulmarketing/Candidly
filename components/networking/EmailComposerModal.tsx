@@ -8,6 +8,7 @@ interface EmailComposerModalProps {
   onClose: () => void
   contacts: Contact[]
   defaultContact?: Contact | null
+  isPro?: boolean
 }
 
 type Template = 'candidature_spontanee' | 'candidature_offre' | 'demande_meeting' | 'relance' | 'remerciement'
@@ -28,7 +29,9 @@ const TONES: { id: Tone; icon: string; label: string; desc: string }[] = [
   { id: 'direct', icon: '⚡', label: 'Direct', desc: 'Court et percutant' },
 ]
 
-export default function EmailComposerModal({ isOpen, onClose, contacts, defaultContact }: EmailComposerModalProps) {
+const FREE_EMAIL_KEY = 'candidly_free_email_used'
+
+export default function EmailComposerModal({ isOpen, onClose, contacts, defaultContact, isPro = false }: EmailComposerModalProps) {
   const [step, setStep] = useState<'form' | 'result'>('form')
   const [selectedContactId, setSelectedContactId] = useState<string>(defaultContact?.id || '')
   const [template, setTemplate] = useState<Template>('candidature_spontanee')
@@ -82,6 +85,14 @@ export default function EmailComposerModal({ isOpen, onClose, contacts, defaultC
   }
 
   const handleGenerate = async () => {
+    if (!isPro) {
+      try {
+        if (localStorage.getItem(FREE_EMAIL_KEY)) {
+          setError('Tu as utilisé ton email IA gratuit. Passe à Pro pour un accès illimité.')
+          return
+        }
+      } catch { /* localStorage indisponible */ }
+    }
     setGenerating(true)
     setError('')
     try {
@@ -103,6 +114,7 @@ export default function EmailComposerModal({ isOpen, onClose, contacts, defaultC
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error || 'Erreur de génération'); return }
+      if (!isPro) { try { localStorage.setItem(FREE_EMAIL_KEY, '1') } catch { /* ignore */ } }
       setResult(data)
       setStep('result')
     } catch {

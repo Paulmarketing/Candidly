@@ -10,6 +10,34 @@ interface PricingCardProps {
 export default function PricingCard({ plan, onChoose, loading, isCurrent }: PricingCardProps) {
   const isPro = plan === 'pro'
 
+  const proFeatures = [
+    '✅ Candidatures illimitées',
+    '✅ Calendrier des entretiens',
+    '✅ Import d\'offre par URL (IA)',
+    '✅ Rappels email automatiques',
+    '✅ Export CSV',
+    '✅ Section Networking illimitée',
+    '✅ Email IA illimité (5 templates)',
+    '✨ Analyse de CV par IA illimitée',
+    '✨ Lettre de motivation IA illimitée',
+    '✨ Préparation aux entretiens IA',
+  ]
+
+  const freeFeatures = [
+    '✅ Jusqu\'à 10 candidatures',
+    '✅ Calendrier des entretiens',
+    '✅ Tableau de bord & stats',
+    '✅ Export CSV',
+    '🎁 1 import d\'offre par URL',
+    '🎁 3 contacts Networking',
+    '🎁 1 email IA gratuit',
+    '🎁 1 analyse CV gratuite',
+    '🎁 1 lettre de motivation gratuite',
+    '🎁 1 préparation entretien gratuite',
+    '⬜ Rappels email (Pro)',
+    '⬜ Networking illimité (Pro)',
+  ]
+
   return (
     <div
       className="glass-card hover-card"
@@ -74,29 +102,11 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
 
       {/* Features */}
       <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
-        {(isPro
-          ? [
-              '✅ Candidatures illimitées',
-              '✅ Rappels email automatiques',
-              '✅ Export CSV',
-              '✨ Analyse de CV par IA illimitée',
-              '✨ Lettre de motivation IA illimitée',
-              '✨ Préparation aux entretiens IA',
-            ]
-          : [
-              '✅ Jusqu\'à 10 candidatures',
-              '✅ Tableau de bord de base',
-              '✅ Export CSV',
-              '🎁 1 analyse CV gratuite',
-              '🎁 1 lettre de motivation gratuite',
-              '🎁 1 préparation entretien gratuite',
-              '⬜ Rappels email (Pro)',
-            ]
-        ).map((feature, i) => (
+        {(isPro ? proFeatures : freeFeatures).map((feature, i) => (
           <li
             key={i}
             style={{
-              fontSize: 14,
+              fontSize: 13,
               color: feature.startsWith('⬜') ? 'var(--text3)' : 'var(--text2)',
             }}
           >
