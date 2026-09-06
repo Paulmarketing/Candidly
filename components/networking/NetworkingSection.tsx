@@ -5,6 +5,7 @@ import { createBrowserClient } from '@/lib/supabase'
 import type { Contact } from '@/types'
 import AddContactModal from './AddContactModal'
 import EmailComposerModal from './EmailComposerModal'
+import LinkedInAnalysisModal from './LinkedInAnalysisModal'
 import ConfirmDialog from '@/components/ConfirmDialog'
 
 type ContactInsert = Omit<Contact, 'id' | 'user_id' | 'created_at'>
@@ -42,6 +43,7 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
   const [search, setSearch] = useState('')
   const [emailModalOpen, setEmailModalOpen] = useState(false)
   const [emailContact, setEmailContact] = useState<Contact | null>(null)
+  const [linkedinModalOpen, setLinkedinModalOpen] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -117,7 +119,10 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
             {stats.total} contact{stats.total !== 1 ? 's' : ''} · {stats.avecEmail} avec email · {stats.avecLinkedin} avec LinkedIn
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 10 }}>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => setLinkedinModalOpen(true)}>
+            🔍 Analyser mon LinkedIn
+          </button>
           <button className="btn-secondary" style={{ fontSize: 13 }} onClick={() => { setEmailContact(null); setEmailModalOpen(true) }}>
             ✉️ Composer un email
           </button>
@@ -216,6 +221,12 @@ export default function NetworkingSection({ userId, isPro }: NetworkingSectionPr
           </button>
         </div>
       )}
+
+      <LinkedInAnalysisModal
+        isOpen={linkedinModalOpen}
+        onClose={() => setLinkedinModalOpen(false)}
+        isPro={isPro}
+      />
 
       <AddContactModal
         isOpen={addModalOpen}
