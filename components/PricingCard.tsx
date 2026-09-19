@@ -89,11 +89,21 @@ export default function PricingCard({ plan, onChoose, loading, isCurrent }: Pric
         >
           {isPro ? 'Plan Pro' : 'Plan Gratuit'}
         </p>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-          <span style={{ fontSize: 40, fontWeight: 600, color: 'var(--text1)', lineHeight: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+          <span style={{
+            fontSize: 48,
+            fontWeight: 800,
+            lineHeight: 1,
+            background: isPro
+              ? 'linear-gradient(135deg,#5b7cf6,#9b8ef8)'
+              : 'linear-gradient(135deg,#1a1a2e,#4a4f72)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
             {isPro ? '5€' : '0€'}
           </span>
-          <span style={{ fontSize: 13, color: 'var(--text3)' }}>{isPro ? '/mois' : 'pour toujours'}</span>
+          <span style={{ fontSize: 14, color: 'var(--text3)', fontWeight: 500 }}>{isPro ? '/mois' : 'pour toujours'}</span>
         </div>
         {isPro && (
           <p style={{ fontSize: 12, color: 'var(--accent)', marginTop: 6, fontWeight: 500 }}>
